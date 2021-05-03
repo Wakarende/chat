@@ -12,8 +12,13 @@
       <li class="nav-item"><a href="#" class="nav-link">About</a></li>
     </ul>
     <div class="col-md-3 text-end">
-      <button type="button" class="btn btn-outline-primary me-2">Login</button>
-      <button type="button" class="btn btn-primary">Sign-up</button>
+       {% if current_user.is_authenticated %}
+      <li style="color:white;padding:15px;">{{current_user.username}}</li>
+      <button type="button" class="btn btn-outline-primary me-2"><a href="{{url_for('auth.logout')}}">Logout</a></button>
+      {% else %}
+      <button type="button" class="btn btn-outline-primary me-2"><a href="{{url_for('auth.login')}}">Login</a></button> 
+      <button type="button" class="btn btn-primary"><a href="{{url_for('auth.register')}}">Sign Up</a></button>
+      {% endif %}
     </div>
   </header>
 </div>
