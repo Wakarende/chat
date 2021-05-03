@@ -1,4 +1,5 @@
 from . import main
+from flask import render_template
 
 @main.route('/')
 def index():
@@ -9,4 +10,4 @@ def index():
 
   title = 'Chat'
 
-  return '<h1>Hello Joy</h1>'
+  return render_template('index.html',title=title)
