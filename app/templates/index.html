@@ -1,9 +1,65 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-<h1>Hello Joy</h1>
-</div>
 
+<!--   page footer-->
+ <footer class ="section footer-classic context-dark decorated-section-4">
+     <div class ="container">
+         <div class ="row row-50 justify-content-between">
+             <div class =" col-lg-7">
+                 <div class ="wow slideInRight" style ="visibility:visibile; animation-name:slideInRight">
+                     <div class="row row-50">
+                         <div class ="col-12">
+                             <h5 class="Subscribe & Stay Updated">
+                             </h5>
+                             <form class="form-inline action="{{url_for('main.subscribe')}}" method="POST">
+                                 <label class="input label">
+                                     Enter Email Address
+                                 </label>
+                             <input class ="form-control" type="email" name="subscriber" required>
+                             <span class ="form-validation">This text field is required.</span>
+                             <div class ="form-button group-sm text-center text-lg-left">
+                                 <button class ="button button-primary" type="submit">
+                                     Subscribe
+                                 </button>
+                             </div>
+
+                             </form>
+
+                         </div>
+
+                     </div>
+
+                 </div>
+
+             </div>
+
+         </div>
+        <div class ="col-md-6">
+            <h5 class="footer-title">Address & Phone</h5>
+            <ul class="list-contact-info">
+                <li><a target="_blank " href="# "><i class="fa fa-location slideanim"></i></a>
+                <h1 class="uppercase general-sub slideanim">Langata,Nairobi ,Kenya </h1>
+                <p class="inline-block slideanim">
+                        Phone: +254 712345678<br>
+                    </p>
+                </li>
+            </ul>
+
+        </div>
+         <div class ="col-md-6">
+             <h5 class="footer-title">Get Social</h5>
+             <p class="big">Follow us to stay connected and receive instant updates.</p>
+           <ul class ="social-list">
+               <li><a target="_blank " href="# "><i class="fa fa-facebook slideanim"></i></a></li>
+                        <li><a target="_blank " href="# "><i class="fa fa-twitter slideanim"></i></a></li>
+                        <li><a target="_blank " href="# "><i class="fa fa-instagram slideanim"></i></a></li>
+                        <li><a target="_blank " href="# "><i class="fa fa-youtube slideanim"></i></a></li>
+
+           </ul>
+         </div>
+     </div>
+
+ </footer>
 {% endblock %}
 
