@@ -1,24 +1,22 @@
-<div class="container">
-  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-      <span class="fs-4">Chat</span>
-    </a>
+<nav>
+      <input type="checkbox" id="check">
+      <label for="check" class="checkbtn">
+        <i class="fa fa-bars"></i>
+      </label>
+      <label class="logo">Chat</label>
+      <ul>
+        <li><a class="active" href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Feedback</a></li>
+          {% if current_user.is_authenticated %}
+          <li><a href="{{url_for('main.profile',uname=current_user.username)}}"><i class="fa fa-user"></i>&nbsp; My account</a></li>
+          <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out-alt"></i>&nbsp;log out</a></li>
 
-    <ul class="nav nav-pills">
-      <li class="nav-item"><a href="/" class="nav-link active">Home</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-    </ul>
-    <div class="col-md-3 text-end">
-       {% if current_user.is_authenticated %}
-      <a href="{{url_for('main.profile',uname=current_user.username)}}"><li style="padding:15px;">{{current_user.username}}</li></a>
-      <button type="button" class="btn btn-outline-primary me-2"><a href="{{url_for('auth.logout')}}">Logout</a></button>
-      {% else %}
-      <button type="button" class="btn btn-outline-primary me-2"><a href="{{url_for('auth.login')}}">Login</a></button> 
-      <button type="button" class="btn btn-primary"><a href="{{url_for('auth.register')}}">Sign Up</a></button>
-      {% endif %}
-    </div>
-  </header>
-</div>
+           {% else %}
+          <li><a href="{{url_for('auth.register')}}"><i class="fa fa-user-plus"></i></i>&nbsp; <strong>Sign Up</strong></a></li>
+          <li><a href="{{url_for('auth.login')}}"><i class="fa fa-sign-in-alt"></i></i>&nbsp; <strong>Log In</strong></a></li>
+          {% endif %}
+      </ul>
+    </nav>
