@@ -97,11 +97,12 @@ def add_playlist():
     db.session.add(new_playlist)
     db.session.commit()
         # flash(f"Added {name} at {description}")
-    return redirect(url_for('main.playlist_disp'))
+    return redirect(url_for('main.playlists'))
 
   return render_template("playlist/new_playlist.html", form=form)
 
-@main.route('/playlist_disp/', methods = ['GET','POST'])
-def disp_playlist(uname):
+@main.route('/playlists/', methods = ['GET','POST'])
+def disp_playlist():
+  playlist = Playlist.query.all()
   title='Playlist Display'
-  return render_template('playlist_disp.html',uname=uname)
+  return render_template('playlist/playlists.html', playlist=playlist)
