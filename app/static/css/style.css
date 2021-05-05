@@ -11,6 +11,10 @@ nav{
   background: #00e6cb;
   height: 60px;
   width: 100%;
+  z-index: 2;
+  position: relative;
+  margin-bottom: 0;
+  transition: all 0.3s ease;
 }
 label.logo{
   color: white;
@@ -21,7 +25,7 @@ label.logo{
 }
 nav ul{
   float: right;
-  margin-right: 5px;
+  margin-right: 15px;
 }
 nav ul li{
   display: inline-block;
@@ -36,7 +40,7 @@ nav ul li a{
   text-transform: uppercase;
 }
 a.active,a:hover{
-  background: #1b9bff;
+  background: black;
   transition: .5s;
 }
 .checkbtn{

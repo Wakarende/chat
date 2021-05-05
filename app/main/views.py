@@ -1,24 +1,29 @@
 from . import main
+from ..request import get_playlists
 from flask import render_template,request,redirect,url_for,flash,abort,session
 from ..models import User,Playlist
 from .forms import UpdateProfile,PlaylistForm
 from .. import db,photos
 from flask_login import login_required,current_user
 
-
 @main.route('/')
 def index():
+    """
+    View root page function that returns the index page and its data
+    """
 
-  '''
-  View root page function that returns the index page and its data
-  '''
-  title = 'Chat'
+    title = 'Chat'
+    playlists = get_playlists('hiphop')
+    print(playlists,'playlists')
 
-  return render_template('index.html',title=title)
+    return render_template('index.html', title=title,playlists=playlists)
 
-#Profile View
+
+
+# Profile View
 @main.route('/user/<uname>')
 def profile(uname):
+  
   user = User.query.filter_by(username = uname).first()
   form = PlaylistForm()
   playlists=Playlist.query.filter_by(user_id=current_user._get_current_object().id).all()
@@ -34,30 +39,31 @@ def profile(uname):
   
   return render_template("profile/profile.html", user = user, playlists=playlists,form=form )
 
-
-#Update Profile
-@main.route('/user/<uname>/update',methods = ['GET','POST'])
+# Update Profile
+@main.route('/user/<uname>/update', methods=['GET', 'POST'])
 @login_required
 def update_profile(uname):
-  user = User.query.filter_by(username = uname).first()
-  if user is None:
-    abort(404)
+    user = User.query.filter_by(username=uname).first()
+    if user is None:
+        abort(404)
 
-  form = UpdateProfile()
+    form = UpdateProfile()
 
-  if form.validate_on_submit():
-    user.bio = form.bio.data
+    if form.validate_on_submit():
+        user.bio = form.bio.data
 
-    db.session.add(user)
-    db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-    return redirect(url_for('.profile',uname=user.username))
+        return redirect(url_for('.profile', uname=user.username))
 
-  return render_template('profile/update.html',form =form)
+    return render_template('profile/update.html', form=form)
 
-@main.route('/user/<uname>/update/pic',methods= ['POST'])
+
+@main.route('/user/<uname>/update/pic', methods=['POST'])
 @login_required
 def update_pic(uname):
+  
   user = User.query.filter_by(username = uname).first()
   if 'photo' in request.files:
     filename = photos.save(request.files['photo'])
@@ -105,4 +111,5 @@ def disp_playlist():
   playlists = Playlist.query.all()
   title='Playlist Display'
   return render_template('playlist/playlists.html', playlists=playlists)
+
 
