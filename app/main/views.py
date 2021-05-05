@@ -1,6 +1,6 @@
 from . import main
 from flask import render_template,request,redirect,url_for,flash,abort,session
-from ..models import User,PlaylistSong,Playlist
+from ..models import User,Playlist
 from .forms import UpdateProfile,PlaylistForm
 from .. import db,photos
 from flask_login import login_required,current_user
@@ -73,14 +73,13 @@ def show_playlist(playlist_id):
 
   # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
   playlist = Playlist.query.get_or_404(playlist_id)
-  songs = PlaylistSong.query.filter_by(playlist_id=playlist_id)
+  # songs = PlaylistSong.query.filter_by(playlist_id=playlist_id)
 
   for b in songs:
     print('testing',b)
 
 
   return render_template("playlist/playlist.html", playlist=playlist)
-
 
 @main.route("/playlists/add", methods=["GET", "POST"])
 def add_playlist():
@@ -92,17 +91,18 @@ def add_playlist():
 
   if form.validate_on_submit():
     name = form.name.data
+    user = current_user
     # description = form.description.data
-    new_playlist = Playlist(name=name)
+    new_playlist = Playlist(name=name,user=user)
     db.session.add(new_playlist)
     db.session.commit()
-        # flash(f"Added {name} at {description}")
-    return redirect(url_for('main.playlists'))
+    return redirect(url_for('main.disp_playlist'))
 
   return render_template("playlist/new_playlist.html", form=form)
 
 @main.route('/playlists/', methods = ['GET','POST'])
 def disp_playlist():
-  playlist = Playlist.query.all()
+  playlists = Playlist.query.all()
   title='Playlist Display'
-  return render_template('playlist/playlists.html', playlist=playlist)
+  return render_template('playlist/playlists.html', playlists=playlists)
+
