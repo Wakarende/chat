@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf%}
+{% block content %}
+
+<h1>Add a form that when submitted creates a new playlist!</h1>
+  <div class="container">
+  <h3>Add a new playlist</h3>
+  {{wtf.quick_form(form)}}
+  </div>
+{% endblock %}

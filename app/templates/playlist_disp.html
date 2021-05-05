@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf%}
+
+
+<!-- #Playlist Display and Form  -->
+<div class="container">
+  <h3>See all the playlists!</h3>
+  <ul>
+    {% if 'user_id' in session %}
+    {% for playlist in playlists %}
+      <li>
+        <a href="/playlists/{{ playlist.id }}">{{ playlist.name }}</a>
+      </li>
+    {% endfor %}
+    {% endif %}
+  </ul>
+</div>

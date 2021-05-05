@@ -1,9 +1,9 @@
 from . import main
-from flask import render_template,request,redirect,url_for,flash,abort
-from ..models import User
-from .forms import UpdateProfile
+from flask import render_template,request,redirect,url_for,flash,abort,session
+from ..models import User,PlaylistSong,Playlist
+from .forms import UpdateProfile,PlaylistForm
 from .. import db,photos
-from flask_login import login_required
+from flask_login import login_required,current_user
 
 
 @main.route('/')
@@ -20,11 +20,19 @@ def index():
 @main.route('/user/<uname>')
 def profile(uname):
   user = User.query.filter_by(username = uname).first()
-
+  form = PlaylistForm()
+  playlists=Playlist.query.filter_by(user_id=current_user._get_current_object().id).all()
   if user is None:
     abort(404)
 
-  return render_template("profile/profile.html", user = user)
+  if form.validate_on_submit():
+    name = form.name.data
+    new_playlist = Playlist(name=name, user_id=session['user_id'])
+    db.session.add(new_playlist)
+    db.session.commit()
+    playlists.append(new_playlist)
+  
+  return render_template("profile/profile.html", user = user, playlists=playlists,form=form )
 
 
 #Update Profile
@@ -84,11 +92,16 @@ def add_playlist():
 
   if form.validate_on_submit():
     name = form.name.data
-    description = form.description.data
-    new_playlist = Playlist(name=name, description=description)
+    # description = form.description.data
+    new_playlist = Playlist(name=name)
     db.session.add(new_playlist)
     db.session.commit()
         # flash(f"Added {name} at {description}")
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('main.playlist_disp'))
 
   return render_template("playlist/new_playlist.html", form=form)
+
+@main.route('/playlist_disp/', methods = ['GET','POST'])
+def disp_playlist(uname):
+  title='Playlist Display'
+  return render_template('playlist_disp.html',uname=uname)
