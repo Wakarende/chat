@@ -75,8 +75,8 @@ def show_playlist(playlist_id):
   playlist = Playlist.query.get_or_404(playlist_id)
   # songs = PlaylistSong.query.filter_by(playlist_id=playlist_id)
 
-  for b in songs:
-    print('testing',b)
+  # for b in songs:
+  #   print('testing',b)
 
 
   return render_template("playlist/playlist.html", playlist=playlist)
