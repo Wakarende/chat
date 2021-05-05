@@ -57,3 +57,38 @@ def update_pic(uname):
     user.profile_pic_path = path
     db.session.commit()
   return redirect(url_for('main.profile',uname=uname))
+
+
+@main.route("/playlists/<int:playlist_id>")
+def show_playlist(playlist_id):
+  """Show detail on specific playlist."""
+
+  # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
+  playlist = Playlist.query.get_or_404(playlist_id)
+  songs = PlaylistSong.query.filter_by(playlist_id=playlist_id)
+
+  for b in songs:
+    print('testing',b)
+
+
+  return render_template("playlist/playlist.html", playlist=playlist)
+
+
+@main.route("/playlists/add", methods=["GET", "POST"])
+def add_playlist():
+  """Handle add-playlist form:
+  - if form not filled out or invalid: show form
+  - if valid: add playlist to SQLA and redirect to list-of-playlists
+  """
+  form = PlaylistForm()
+
+  if form.validate_on_submit():
+    name = form.name.data
+    description = form.description.data
+    new_playlist = Playlist(name=name, description=description)
+    db.session.add(new_playlist)
+    db.session.commit()
+        # flash(f"Added {name} at {description}")
+    return redirect(url_for('main.profile'))
+
+  return render_template("playlist/new_playlist.html", form=form)
