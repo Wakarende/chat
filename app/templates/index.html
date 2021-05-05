@@ -5,5 +5,19 @@
 <h1>Hello Joy</h1>
 </div>
 
+<h4>Leave a comment</h4>
+
+<p>
+  You can leave me a comment below, or see comments people have left me <a href="{{ url_for('main.message') }}">here</a>
+</p>
+<div class=container>
+  <div class="large-8 columns">
+    <form action="/submit_message" method="post">
+      <input class=row type="text" placeholder="Name" name="who"><br>
+      <textarea class=row placeholder="Enter your message here" name="message" cols="50" rows="4"></textarea><br>
+      <input class=row type="submit" value="Submit">
+    </form>
+  </div>
+</div>
 {% endblock %}
 

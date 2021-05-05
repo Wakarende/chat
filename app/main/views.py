@@ -5,7 +5,7 @@ from .forms import UpdateProfile
 from .. import db,photos
 from flask_login import login_required
 
-
+    
 @main.route('/')
 def index():
 
@@ -16,6 +16,24 @@ def index():
   title = 'Chat'
 
   return render_template('index.html',title=title)
+
+#message view
+@main.route('/messages')
+def message():
+  '''
+  View page function that returns the message page.
+  '''
+  return 'Comments'
+
+@main.route('/submit_message',methods=['POST'])
+def submit_message():
+  print(request.form)
+  #body = request.POST.get('message')
+  #who = request.POST.get('who')
+
+  #User.objects.create(body=body, who=who)
+  return redirect(url_for('main.message'))
+
 
 #Profile View
 @main.route('/user/<uname>')
