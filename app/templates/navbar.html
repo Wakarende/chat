@@ -5,9 +5,9 @@
       </label>
       <label class="logo">Chat</label>
       <ul>
-        <li><a class="active" href="{{ url_for('main.index') }}">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
+        <li><a class="active" href="/">Home</a></li>
+        <li><a href="{{url_for('main.add_playlist')}}">Create playlist</a></li>
+        <li><a href="{{url_for('main.disp_playlist')}}">All playlists</a></li>
         <li><a href="#">Contact</a></li>
 
           {% if current_user.is_authenticated %}
