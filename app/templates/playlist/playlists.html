@@ -1,18 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <h1 class="display-5 fw-bold text-center text-muted">All Playlists.</h1>
+  </div>
+</div>
 <div class="container">
-  <h1>See all the playlists!</h1>
-
+  <h1 class="text-center mb-5">See all the playlists!</h1>
   <ul>
   {% for playlist in playlists %}
-    <li>
-      <a href="/playlists/{{ playlist.id }}">{{ playlist.name }}</a>
-    </li>
+    <div class="col-md-4">
+      <div class="card mt-5 shadow" style="width:18rem;">
+        <div class="card-body">
+          <a href="/playlists/{{ playlist.id }}">{{ playlist.name }}</a>
+        </div>
+      </div>
+    </div><br>
   {% endfor %}
-  </ul>
-
-  <p><a class="btn btn-primary" href="/playlists/add">Add a playlist</a></p>
+  
+  <p class="text-center mt-5"><a class="btn btn-primary" href="/playlists/add">Add a playlist</a></p>
 
 </div>
 

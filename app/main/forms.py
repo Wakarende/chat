@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField,BooleanField,TextAreaField,IntegerField
 from wtforms.validators import Required,Email,EqualTo, InputRequired,Length,NumberRange,URL,Optional
-from ..models import User, Playlist,Song
+from ..models import User, Playlist,Song,PlaylistSong
 from wtforms import ValidationError
 from email_validator import validate_email
 from wtforms import SelectField
@@ -25,3 +25,4 @@ class SongForm(FlaskForm):
 class NewSongForPlaylistForm(FlaskForm):
   """Form for adding a song to playlist."""
   song = SelectField('Song To Add', coerce=int)
+  submit = SubmitField('Submit')

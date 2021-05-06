@@ -1,10 +1,10 @@
 from . import main
 from flask import render_template,request,redirect,url_for,flash,abort,session
-from ..models import User,Playlist
-from .forms import UpdateProfile,PlaylistForm
+from ..models import User,Playlist,Song,PlaylistSong
+from .forms import UpdateProfile,PlaylistForm,SongForm,NewSongForPlaylistForm
 from .. import db,photos
 from flask_login import login_required,current_user
-from ..requests import SpotifyAPI
+# from ..requests import SpotifyAPI
 
 
 @main.route('/')
@@ -138,7 +138,7 @@ def add_song():
   if form.validate_on_submit():
     title = request.form['title']
     artist = request.form['artist']
-    new_song = Song(title=title, artist=artist)
+    new_song = Song(title=title,artist=artist)
     db.session.add(new_song)
     db.session.commit()
     return redirect("/songs")
@@ -167,3 +167,6 @@ def add_song_to_playlist(playlist_id):
     return redirect(f"/playlists/{playlist_id}")
 
   return render_template("song/add_song_to_playlist.html", playlist=playlist, form=form)
+
+# @main.route('/search/<song_name>')
+# def search()

@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-<div class="container">
-  {{wtf.quick_form(form)}}
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <h1 class="display-5 fw-bold text-center text-muted">Update Profile</h1>
+  </div>
 </div>
+
+<!-- Form  -->
+<div class="container">
+  <main class="form-signin text-center">
+    <h1 class="h3 mb-3 fw-normal">Edit Profile</h1>
+    <div class="form-floating">
+      {{wtf.quick_form(form)}}
+    </div>
+  </main>
+</div>
+
+{% endblock %}
