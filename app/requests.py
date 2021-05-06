@@ -1,6 +1,6 @@
 import requests
 import base64
-from datetime import datetime
+import datetime
 from urllib.parse import urlencode
 
 client_id = '3acfb5c708b1421888f1d5d74388e27f'
@@ -19,9 +19,9 @@ class SpotifyAPI(object):
     self.client_secret = client_secret
 
   def get_client_credentials(self):
-        """
-        Returns a base64 encoded string
-        """
+    """
+    Returns a base64 encoded string
+    """
     client_id = self.client_id
     client_secret = self.client_secret
     if client_secret == None or client_id == None:
@@ -77,8 +77,11 @@ class SpotifyAPI(object):
       "Authorization": f"Bearer {access_token}"
     }
     return headers
-        
-        
+
+
+  def get_playlists(query):
+    return sp.search(q=query, type='playlist',limit=10)
+      
   def get_resource(self, lookup_id, resource_type='albums', version='v1'):
     endpoint = f"https://api.spotify.com/{version}/{resource_type}/{lookup_id}"
     headers = self.get_resource_header()
@@ -114,4 +117,4 @@ class SpotifyAPI(object):
           query = f"{query} {operator} {operator_query}"
     query_params = urlencode({"q": query, "type": search_type.lower()})
     print(query_params)
-    return self.base_search(query_params
+    return self.base_search(query_params)

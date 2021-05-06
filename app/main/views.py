@@ -4,6 +4,7 @@ from ..models import User,Playlist
 from .forms import UpdateProfile,PlaylistForm
 from .. import db,photos
 from flask_login import login_required,current_user
+from ..requests import SpotifyAPI
 
 
 @main.route('/')
@@ -12,9 +13,7 @@ def index():
   '''
   View root page function that returns the index page and its data
   '''
-  title = 'Chat'
-
-  return render_template('index.html',title=title)
+  return render_template('index.html',title='Chat')
 
 #Profile View
 @main.route('/user/<uname>')
@@ -106,3 +105,65 @@ def disp_playlist():
   title='Playlist Display'
   return render_template('playlist/playlists.html', playlists=playlists)
 
+# Songs 
+@main.route("/songs")
+def show_all_songs():
+  """Show list of songs."""
+
+  songs = Song.query.all()
+  return render_template("song/songs.html", songs=songs)
+
+
+@main.route("/songs/<int:song_id>")
+def show_song(song_id):
+  """return a specific song"""
+
+  song = Song.query.get_or_404(song_id)
+  playlists = song.play_song
+
+
+  return render_template("song/song.html", song=song, playlists=playlists)
+
+
+@main.route("/songs/add", methods=["GET", "POST"])
+def add_song():
+  """Handle add-song form:
+
+  - if form not filled out or invalid: show form
+  - if valid: add playlist to SQLA and redirect to list-of-songs
+  """
+  form = SongForm()
+  songs = Song.query.all()
+
+  if form.validate_on_submit():
+    title = request.form['title']
+    artist = request.form['artist']
+    new_song = Song(title=title, artist=artist)
+    db.session.add(new_song)
+    db.session.commit()
+    return redirect("/songs")
+
+  return render_template("song/new_song.html", form=form)
+
+
+
+@main.route("/playlists/<int:playlist_id>/add-song", methods=["GET", "POST"])
+def add_song_to_playlist(playlist_id):
+  """Add a playlist and redirect to list."""
+    
+  playlist = Playlist.query.get_or_404(playlist_id)
+  form = NewSongForPlaylistForm()
+
+  # Restrict form to songs not already on this playlist
+
+  curr_on_playlist = [s.id for s in playlist.songs]
+  form.song.choices = (db.session.query(Song.id, Song.title).filter(Song.id.notin_(curr_on_playlist)).all())
+
+  if form.validate_on_submit():    
+    song = Song.query.get(form.song.data)
+    playlist.songs.append(song)
+    db.session.commit()
+
+    return redirect(f"/playlists/{playlist_id}")
+
+  return render_template("song/add_song_to_playlist.html", playlist=playlist, form=form)

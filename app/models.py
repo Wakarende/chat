@@ -41,8 +41,21 @@ class Playlist(db.Model):
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   name = db.Column(db.String(100), nullable=False)
   # play_s = db.relationship('PlaylistSong', backref='Playlist')
-  # song = db.relationship('Song', secondary='playlist_song', backref='playlists')
+  song = db.relationship('Song', backref='playlists')
   user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
   user =   db.relationship("User",  backref="playlists")
 
 
+class Song(db.Model):
+  """Song."""
+  __tablename__= "songs"
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(30), nullable=False)
+  artist = db.Column(db.String(20), nullable=False)
+  play_song = db.relationship('Playlist',secondary="playlist_song",backref="songs")
+
+class PlaylistSong(db.Model):
+  """Mapping of a playlist to a song."""
+  __tablename__ = "playlist_song"
+  playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), primary_key=True)
+  song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), primary_key=True)
