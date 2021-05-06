@@ -16,7 +16,7 @@ class Config:
   OAUTH_TOKEN='BQD0reLaZ4rHv53R9TViOt1pezq5Rw8dTPeeQ6Feiofsc8Yqz_boB19ZDH52oFMaRJY7qwYJf_DOHP04gknFcennFx4y3Fxo3MLjoxO1jFvzSiv5brybE8xA_tPiSyjaHYvY7fCkkbt6TitKxVK0DMI1ODwv2M5jBny6DxdRYm7veSRcR9WLlpb9yRCWSsFRFA32Fg'
 
 
-    # Spotify API
+  # Spotify API
   CLIENT_Id = '3acfb5c708b1421888f1d5d74388e27f'
   CLIENT_SECRET = '8fa76f281cf540af838095c203ce2c53'
   ACCESS_TOKEN_URL = 'https://accounts.spotify.com/api/token'
