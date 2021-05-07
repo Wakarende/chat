@@ -8,6 +8,16 @@ from . import login_manager
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+class Tracks:
+  '''
+  Tracks class to define Track Objects
+  '''
+  def __init__(self,id,name,type,uri,image,release_date):
+    self.id =id
+    self.name = name
+    self.type = type
+    self.image = "https://i.scdn.co/image/w300" + image
+    self.release_date = release_date
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -43,6 +53,9 @@ class Playlist(db.Model):
   song = db.relationship('Song', secondary='playlist_song', backref='playlists')
   user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
   user =   db.relationship("User",  backref="playlists")
+
+
+
 
 
 class Song(db.Model):
