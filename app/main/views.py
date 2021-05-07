@@ -4,7 +4,7 @@ from ..models import User,Playlist,Song,PlaylistSong
 from .forms import UpdateProfile,PlaylistForm,SongForm,NewSongForPlaylistForm
 from .. import db,photos
 from flask_login import login_required,current_user
-from ..requests import get_tracks
+# from ..requests import get_tracks
 
 @main.route('/')
 def index():
@@ -12,9 +12,9 @@ def index():
   View root page function that returns the index page and its data
   '''
   
-  new_tracks= get_tracks()
+  # new_tracks= get_tracks()
   title = 'Chat'
-  return render_template('index.html', title='Chat',new_tracks=new_tracks)
+  return render_template('index.html', title='Chat')
 
 
 

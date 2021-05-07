@@ -13,7 +13,7 @@ class Config:
   #Spotify API
   TRACK_API_BASE_URL ="https://api.spotify.com/v1/browse/new-releases?country=US&limit=20&offset=10"
   BASE_URL='https://api.spotify.com'
-  OAUTH_TOKEN='BQD0reLaZ4rHv53R9TViOt1pezq5Rw8dTPeeQ6Feiofsc8Yqz_boB19ZDH52oFMaRJY7qwYJf_DOHP04gknFcennFx4y3Fxo3MLjoxO1jFvzSiv5brybE8xA_tPiSyjaHYvY7fCkkbt6TitKxVK0DMI1ODwv2M5jBny6DxdRYm7veSRcR9WLlpb9yRCWSsFRFA32Fg'
+  OAUTH_TOKEN='BQDTdiN4G_w334Zcwtdi9875XO7xwfWH4XhAMoBz_MpC4ij3NKsYCo1afYHOa8OaorqrySujVPtm42dRYl4ZXhFAO03dqKRm62T5aOAQWDDn1zwpF0WVGMWZs53ohe0AD2CM_XZTaB_kG2hjIZQrmwhImvYt7wrsgI6kMlOZgdhjikyCCzWTA0hI2VPhjPX3QeuQqeAhRMoMPzPt5yIUIQ'
 
 
   # Spotify API
