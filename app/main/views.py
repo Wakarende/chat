@@ -4,7 +4,11 @@ from ..models import User,Playlist,Song,PlaylistSong
 from .forms import UpdateProfile,PlaylistForm,SongForm,NewSongForPlaylistForm
 from .. import db,photos
 from flask_login import login_required,current_user
-# from ..requests import get_tracks
+from .helpers import first
+from spotify import spotify
+
+sp = spotify.Spotify('3acfb5c708b1421888f1d5d74388e27f', '8fa76f281cf540af838095c203ce2c53')
+
 
 @main.route('/')
 def index():
@@ -13,8 +17,8 @@ def index():
   '''
   
   # new_tracks= get_tracks()
-  title = 'Chat'
-  return render_template('index.html', title='Chat')
+  title = 'Chart'
+  return render_template('index.html', title='Chart')
 
 
 
@@ -175,3 +179,99 @@ def disp_playlist():
   title = 'Playlist Display'
   return render_template('playlist/playlists.html', playlists=playlists)
 
+
+@main.route('/playlists/<int:playlist_id>/search', methods=["GET", "POST"])
+def show_form(playlist_id):
+  """Show form that searches new form, and show results"""
+  playlist = Playlist.query.get(playlist_id)
+  play_id = playlist_id
+  form = SearchSongsForm()
+  resultsSong = []
+  checkbox_form = request.form
+
+  list_of_songs_spotify_id_on_playlist = []
+  for song in playlist.songs:
+    list_of_songs_spotify_id_on_playlist.append(song.spotify_id)
+  songs_on_playlist_set = set(list_of_songs_spotify_id_on_playlist)
+
+  if form.validate_on_submit() and checkbox_form['form'] == 'search_songs':
+    track_data = form.track.data
+    api_call_track = sp.search(track_data, 'track')
+
+    # get search results, don't inclue songs that are on playlist already
+    for item in api_call_track['tracks']['items']:
+      if item['id'] not in songs_on_playlist_set:
+        images = [image['url'] for image in item['album']['images']]
+        artists = [artist['name'] for artist in item['artists']]
+        urls = item['album']['external_urls']['spotify']
+        resultsSong.append({
+          'title': item['name'],
+          'spotify_id': item['id'],
+          'album_name': item['album']['name'],
+          'album_image': first(images, ''),
+          'artists': ", ".join(artists),
+          'url': urls
+        })
+
+    # search results checkbox form
+  if 'form' in checkbox_form and checkbox_form['form'] == 'pick_songs':
+    list_of_picked_songs = checkbox_form.getlist('track')
+    # map each item in list of picked songs
+    jsonvalues = [json.loads(item) for item in list_of_picked_songs]
+
+    for item in jsonvalues:
+      title = item['title']
+      spotify_id = item['spotify_id']
+      album_name = item['album_name']
+      album_image = item['album_image']
+      artists = item['artists']
+            # print(title)
+      new_songs = Song(title=title, spotify_id=spotify_id, album_name=album_name, album_image=album_image,
+                             artists=artists)
+      db.session.add(new_songs)
+      db.session.commit()
+            # add new song to its playlist
+      playlist_song = PlaylistSong(song_id=new_songs.id, playlist_id=playlist_id)
+      db.session.add(playlist_song)
+      db.session.commit()
+
+    return redirect(f'/playlists/{playlist_id}')
+
+  def serialize(obj):
+    return json.dumps(obj)
+
+  return render_template(
+    'song/search_new_songs.html', playlist=playlist, form=form, resultsSong=resultsSong, serialize=serialize
+  )
+
+
+@main.route("/playlists/<int:playlist_id>/update", methods=["GET", "POST"])
+def update_playlist(playlist_id):
+  """Show update form and process it."""
+  playlist = Playlist.query.get(playlist_id)
+  if "user_id" not in session or playlist.user_id != session['user_id']:
+    flash("You must be logged in to view!")
+    return redirect("/login")
+  form = PlaylistForm(obj=playlist)
+  if form.validate_on_submit():
+    playlist.name = form.name.data
+    db.session.commit()
+    return redirect(f"/users/profile/{session['user_id']}")
+  return render_template("/playlist/edit.html", form=form, playlist=playlist)
+
+
+@main.route("/playlists/<int:playlist_id>/delete", methods=["POST"])
+def delete_playlist(playlist_id):
+  """Delete playlist."""
+
+  playlist = Playlist.query.get(playlist_id)
+  if "user_id" not in session or playlist.user_id != session['user_id']:
+    raise Unauthorized()
+
+  form = DeleteForm()
+
+  if form.validate_on_submit():
+    db.session.delete(playlist)
+    db.session.commit()
+
+  return redirect(f"/users/profile/{session['user_id']}")
